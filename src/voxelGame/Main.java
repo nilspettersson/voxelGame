@@ -19,7 +19,6 @@ public class Main extends Game{
 
 	@Override
 	public void init() {
-		
 		setBackgroundColor(new Vector4f(0.6f, 0.7f, 1, 1));
 		
 		addScene(new Scene(getWindow()) {
@@ -31,12 +30,12 @@ public class Main extends Game{
 				
 				ChunkManager chunks = new ChunkManager(16, 16);
 				chunks.addChunk(0, 0);
+				chunks.addChunk(1, 0);
 				
-				Entity entity = new Entity(0, shader);
-				entity.addTexture(chunks.getTexture());
-				entity.setGeometry(chunks.getChunks().get(0).getMesh());
 				
-				addEntityToScene(entity);
+				for(int i = 0; i < chunks.getChunks().size(); i++) {
+					addEntityToScene(chunks.getChunks().get(i).getEntity());
+				}
 				
 				addLight(new Vector3f(40, 100, 40), new Vector3f(0.6f, 0.6f, 1), 600);
 				

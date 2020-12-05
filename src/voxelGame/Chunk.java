@@ -1,11 +1,17 @@
 package voxelGame;
 
+import niles.lwjgl.entity.Entity;
 import niles.lwjgl.entity.Geometry;
+import niles.lwjgl.npsl.MeshShader;
+import niles.lwjgl.npsl.Shader;
 import niles.lwjgl.util.Texture;
 
 public class Chunk {
 	
+	private Entity entity;
 	private Geometry mesh;
+	private Shader shader = new MeshShader("block.glsl");
+	
 	private byte[][][] cells;
 	private int column;
 	private int row;
@@ -15,6 +21,7 @@ public class Chunk {
 	
 	public Chunk(int width, int height, int column, int row) {
 		mesh = new Geometry(width * width * height * 36);
+		entity = new Entity(0, shader);
 		
 		//[x][y][z]
 		cells = new byte[width][height][width];
@@ -22,8 +29,8 @@ public class Chunk {
 		for(int x = 0; x < cells.length; x++) {
 			for(int y = 0; y < cells[0].length; y++) {
 				for(int z = 0; z < cells[0][0].length; z++) {
-					//cells[x][y][z] = 1;
-					cells[x][y][z] = (byte)(Math.random() * 2);
+					cells[x][y][z] = 1;
+					//cells[x][y][z] = (byte)(Math.random() * 2);
 				}
 			}
 		}
@@ -70,6 +77,7 @@ public class Chunk {
 		}
 		mesh.updateVertices();
 		mesh.updateIndices();
+		entity.setGeometry(mesh);
 	}
 
 	public Geometry getMesh() {
@@ -103,5 +111,15 @@ public class Chunk {
 	public void setRow(int row) {
 		this.row = row;
 	}
+
+	public Entity getEntity() {
+		return entity;
+	}
+
+	public void setEntity(Entity entity) {
+		this.entity = entity;
+	}
+	
+	
 
 }

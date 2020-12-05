@@ -1,8 +1,7 @@
 package voxelGame;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-
+import org.joml.Vector3f;
 import niles.lwjgl.util.Texture;
 
 public class ChunkManager {
@@ -23,12 +22,16 @@ public class ChunkManager {
 		this.chunkWidth = chunkWidth;
 	}
 	
+	
+	
+	
 	public void addChunk(int column, int row) {
 		chunks.add(new Chunk(chunkWidth, chunkHeight, column, row));
 		chunks.get(chunks.size() - 1).generateMesh(texture);
+		chunks.get(chunks.size() - 1).getEntity().addTexture(getTexture());
+		chunks.get(chunks.size() - 1).getEntity().getTransform().setPosition(new Vector3f(column * chunkWidth * 2, 0, row * chunkHeight * 2));
 	}
 
-	
 	
 	
 	public ArrayList<Chunk> getChunks() {
