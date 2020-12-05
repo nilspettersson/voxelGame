@@ -1,6 +1,7 @@
 package voxelGame;
 
 import org.joml.Vector3f;
+import org.joml.Vector4f;
 
 import niles.lwjgl.entity.Entity;
 import niles.lwjgl.entity.Geometry;
@@ -19,6 +20,8 @@ public class Main extends Game{
 	@Override
 	public void init() {
 		
+		setBackgroundColor(new Vector4f(0.6f, 0.7f, 1, 1));
+		
 		addScene(new Scene(getWindow()) {
 			
 			
@@ -30,11 +33,12 @@ public class Main extends Game{
 				chunks.addChunk(0, 0);
 				
 				Entity entity = new Entity(0, shader);
+				entity.addTexture(chunks.getTexture());
 				entity.setGeometry(chunks.getChunks().get(0).getMesh());
 				
 				addEntityToScene(entity);
 				
-				addLight(new Vector3f(40, 100, 40), new Vector3f(0.6f, 0.6f, 1), 400);
+				addLight(new Vector3f(40, 100, 40), new Vector3f(0.6f, 0.6f, 1), 600);
 				
 				getCamera().getPosition().add(new Vector3f(0, 40, 26));
 			}

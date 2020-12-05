@@ -7,7 +7,7 @@ import niles.lwjgl.util.Texture;
 
 public class ChunkManager {
 	
-	static Texture texture = new Texture("res/atlas.png");
+	private Texture texture = new Texture("res/atlas.png");
 	
 	private ArrayList<Chunk> chunks;
 	private int chunkWidth;
@@ -16,13 +16,16 @@ public class ChunkManager {
 	public ChunkManager(int chunkWidth, int chunkHeight) {
 		chunks = new ArrayList<Chunk>();
 		
+		texture.setSpriteWidth(16);
+		texture.setSpriteHeight(16);
+		
 		this.chunkHeight = chunkHeight;
 		this.chunkWidth = chunkWidth;
 	}
 	
 	public void addChunk(int column, int row) {
 		chunks.add(new Chunk(chunkWidth, chunkHeight, column, row));
-		chunks.get(chunks.size() - 1).generateMesh();
+		chunks.get(chunks.size() - 1).generateMesh(texture);
 	}
 
 	
@@ -52,4 +55,13 @@ public class ChunkManager {
 		this.chunkHeight = chunkHeight;
 	}
 
+	public Texture getTexture() {
+		return texture;
+	}
+
+	public void setTexture(Texture texture) {
+		this.texture = texture;
+	}
+	
+	
 }

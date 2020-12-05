@@ -1,6 +1,7 @@
 package voxelGame;
 
 import niles.lwjgl.entity.Geometry;
+import niles.lwjgl.util.Texture;
 
 public class Chunk {
 	
@@ -34,31 +35,33 @@ public class Chunk {
 		this.height = height;
 	}
 	
-	public void generateMesh(){
+	public void generateMesh(Texture texture){
 		for(int x = 0; x < cells.length; x++) {
 			for(int y = 0; y < cells[0].length; y++) {
 				for(int z = 0; z < cells[0][0].length; z++) {
 					float newX = x * 2;
 					float newY = y * 2;
 					float newZ = z * 2;
-					if(cells[x][y][z] == 1) {
-						if(z == 0 || cells[x][y][z - 1] == 0) {
-							mesh.createFaceBack(newX, newY, newZ, ChunkManager.texture, 0, 0);
+					if(cells[x][y][z] != Block.Air) {
+						int[] sprite = Block.getBlockSprite(cells[x][y][z]);
+						
+						if(z == 0 || cells[x][y][z - 1] == Block.Air) {
+							mesh.createFaceBack(newX, newY, newZ, texture, sprite[0],  sprite[1]);
 						}
-						if(z == width - 1 || cells[x][y][z + 1] == 0) {
-							mesh.createFaceFront(newX, newY, newZ, ChunkManager.texture, 0, 0);
+						if(z == width - 1 || cells[x][y][z + 1] == Block.Air) {
+							mesh.createFaceFront(newX, newY, newZ, texture,  sprite[2],  sprite[3]);
 						}
-						if(x == 0 || cells[x - 1][y][z] == 0) {
-							mesh.createFaceLeft(newX, newY, newZ, ChunkManager.texture, 0, 0);
+						if(x == 0 || cells[x - 1][y][z] == Block.Air) {
+							mesh.createFaceLeft(newX, newY, newZ, texture,  sprite[4],  sprite[5]);
 						}
-						if(x == width - 1 || cells[x + 1][y][z] == 0) {
-							mesh.createFaceRight(newX, newY, newZ, ChunkManager.texture, 0, 0);
+						if(x == width - 1 || cells[x + 1][y][z] == Block.Air) {
+							mesh.createFaceRight(newX, newY, newZ, texture,  sprite[6],  sprite[7]);
 						}
-						if(y == height - 1 || cells[x][y + 1][z] == 0) {
-							mesh.createFaceUp(newX, newY, newZ, ChunkManager.texture, 0, 0);
+						if(y == height - 1 || cells[x][y + 1][z] == Block.Air) {
+							mesh.createFaceUp(newX, newY, newZ, texture,  sprite[8],  sprite[9]);
 						}
-						if(y == 0 || cells[x][y - 1][z] == 0) {
-							mesh.createFaceDown(newX, newY, newZ, ChunkManager.texture, 0, 0);
+						if(y == 0 || cells[x][y - 1][z] == Block.Air) {
+							mesh.createFaceDown(newX, newY, newZ, texture,  sprite[10],  sprite[11]);
 						}
 						
 					}
