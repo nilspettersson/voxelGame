@@ -26,21 +26,7 @@ public class Main extends Game{
 			public void onload() {
 				Shader shader = new MeshShader("block.glsl");
 				
-				/*Texture texture = new Texture("res/atlas.png");
-				texture.setSpriteWidth(16);
-				texture.setSpriteHeight(16);
-				
-				Geometry mesh = new Geometry(36);
-				mesh.createFaceBack(0, 0, 0, texture, 0, 1);
-				mesh.createFaceFront(0, 0, 0, texture, 0, 0);
-				mesh.createFaceLeft(0, 0, 0, texture, 0, 0);
-				mesh.createFaceRight(0, 0, 0, texture, 0, 0);
-				mesh.createFaceUp(0, 0, 0, texture, 0, 0);
-				mesh.createFaceDown(0, 0, 0, texture, 0, 0);
-				mesh.updateVertices();
-				mesh.updateIndices();*/
-				
-				ChunkManager chunks = new ChunkManager(16, 1);
+				ChunkManager chunks = new ChunkManager(16, 16);
 				chunks.addChunk(0, 0);
 				
 				Entity entity = new Entity(0, shader);
@@ -48,9 +34,9 @@ public class Main extends Game{
 				
 				addEntityToScene(entity);
 				
-				addLight(new Vector3f(40, 80, 40), new Vector3f(0.6f, 0.6f, 1), 400);
+				addLight(new Vector3f(40, 100, 40), new Vector3f(0.6f, 0.6f, 1), 400);
 				
-				getCamera().getPosition().add(new Vector3f(0, 10, 10));
+				getCamera().getPosition().add(new Vector3f(0, 40, 26));
 			}
 			
 			@Override
