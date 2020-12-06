@@ -29,7 +29,7 @@ public class ChunkManager {
 		chunks.add(new Chunk(chunkWidth, chunkHeight, column, row));
 		chunks.get(chunks.size() - 1).generateMesh(texture);
 		chunks.get(chunks.size() - 1).getEntity().addTexture(getTexture());
-		chunks.get(chunks.size() - 1).getEntity().getTransform().setPosition(new Vector3f(column * chunkWidth * 2, 0, row * chunkHeight * 2));
+		chunks.get(chunks.size() - 1).getEntity().getTransform().setPosition(new Vector3f(column * chunkWidth * 2, 0, row * chunkWidth * 2));
 	}
 
 	

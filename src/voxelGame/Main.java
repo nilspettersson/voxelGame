@@ -12,6 +12,10 @@ import niles.lwjgl.npsl.Shader;
 import niles.lwjgl.util.Texture;
 
 public class Main extends Game{
+	
+	public Main() {
+		//super(720, 480, false);
+	}
 
 	public static void main(String[] args) {
 		new Main();
@@ -28,9 +32,19 @@ public class Main extends Game{
 			public void onload() {
 				Shader shader = new MeshShader("block.glsl");
 				
-				ChunkManager chunks = new ChunkManager(16, 16);
+				ChunkManager chunks = new ChunkManager(16, 256);
 				chunks.addChunk(0, 0);
 				chunks.addChunk(1, 0);
+				chunks.addChunk(1, 1);
+				chunks.addChunk(0, 1);
+				chunks.addChunk(-1, 0);
+				chunks.addChunk(-1, 1);
+				chunks.addChunk(0, 0+1);
+				chunks.addChunk(1, 0+1);
+				chunks.addChunk(1, 1+1);
+				chunks.addChunk(0, 1+1);
+				chunks.addChunk(-1, 0+1);
+				chunks.addChunk(-1, 1+1);
 				
 				
 				for(int i = 0; i < chunks.getChunks().size(); i++) {
