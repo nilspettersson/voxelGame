@@ -14,7 +14,7 @@ import niles.lwjgl.util.Texture;
 public class Main extends Game{
 	
 	public Main() {
-		//super(720, 480, false);
+		super(720, 480, false);
 	}
 
 	public static void main(String[] args) {
@@ -48,15 +48,15 @@ public class Main extends Game{
 			
 			@Override
 			public void update() {
-				simpleCameraRotation(1.5f);
-				simpleCameraMovement(20f);
+				//simpleCameraRotation(1.5f);
+				simpleCameraMovement(1.6f);
 				
 				int playerX = (int) Math.floor(getCamera().getPosition().x / (2 * 16));
 				int playerZ = (int) Math.floor(getCamera().getPosition().z / (2 * 16));
 				
-				GenerateChuncks(playerX, playerZ, 8);
+				GenerateChuncks(playerX, playerZ, 14);
 				
-				removeChuncks(playerX, playerZ, 24);
+				removeChuncks(playerX, playerZ, 18);
 				
 				
 				

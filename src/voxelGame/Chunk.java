@@ -5,6 +5,7 @@ import niles.lwjgl.entity.Geometry;
 import niles.lwjgl.npsl.MeshShader;
 import niles.lwjgl.npsl.Shader;
 import niles.lwjgl.util.Texture;
+import noise.Noise;
 
 public class Chunk {
 	
@@ -19,7 +20,10 @@ public class Chunk {
 	private int width;
 	private int height;
 	
-	public Chunk(int width, int height, int column, int row) {
+	private Noise noise;
+	
+	public Chunk(int width, int height, int column, int row, Noise noise) {
+		this.noise = noise;
 		this.column = column;
 		this.row = row;
 		
@@ -43,9 +47,15 @@ public class Chunk {
 					byte blockId = 0;
 					float myX = x + column * width;
 					float myZ = z + row * width;
-					if(y <= Math.abs((Math.sin(myZ / 20) * Math.cos(myX / 20)) * 14 + 0)) {
-						blockId = Block.DIRT;
+					
+					float height = noise.getHeightAt(myX, myZ, 2) * 10f + 4;
+					if(height > this.height - 4) {
+						height = this.height - 4;
 					}
+					if(y <= height) {
+						blockId = Block.ROCK;
+					}
+					
 					cells[x][y][z] = blockId;
 				}
 			}
@@ -57,9 +67,23 @@ public class Chunk {
 			for(int y = 0; y < cells[0].length; y++) {
 				for(int z = 0; z < cells[0][0].length; z++) {
 					byte blockId = 0;
-					if(cells[x][y][z] == Block.DIRT && cells[x][y + 1][z] == Block.Air) {
+					if(cells[x][y][z] == Block.ROCK && cells[x][y + 1][z] == Block.Air) {
 						cells[x][y][z] = Block.GRASS;
+						
+						if(cells[x][y - 1][z] == Block.ROCK) {
+							cells[x][y - 1][z] = Block.DIRT;
+						}
+						if(cells[x][y - 2][z] == Block.ROCK) {
+							cells[x][y - 2][z] = Block.DIRT;
+						}
+						if(cells[x][y - 3][z] == Block.ROCK) {
+							cells[x][y - 3][z] = Block.DIRT;
+						}
+						if(cells[x][y - 4][z] == Block.ROCK) {
+							cells[x][y - 4][z] = Block.DIRT;
+						}
 					}
+					
 				}
 			}
 		}

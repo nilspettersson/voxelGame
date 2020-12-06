@@ -3,6 +3,7 @@ package voxelGame;
 import java.util.ArrayList;
 import org.joml.Vector3f;
 import niles.lwjgl.util.Texture;
+import noise.Noise;
 
 public class ChunkManager {
 	
@@ -12,8 +13,11 @@ public class ChunkManager {
 	private int chunkWidth;
 	private int chunkHeight;
 	
+	private Noise noise;
+	
 	public ChunkManager(int chunkWidth, int chunkHeight) {
 		chunks = new ArrayList<Chunk>();
+		noise = new Noise();
 		
 		texture.setSpriteWidth(16);
 		texture.setSpriteHeight(16);
@@ -26,7 +30,7 @@ public class ChunkManager {
 	
 	
 	public void addChunk(int column, int row) {
-		chunks.add(new Chunk(chunkWidth, chunkHeight, column, row));
+		chunks.add(new Chunk(chunkWidth, chunkHeight, column, row, noise));
 		chunks.get(chunks.size() - 1).generateMesh(texture);
 		chunks.get(chunks.size() - 1).getEntity().addTexture(getTexture());
 		chunks.get(chunks.size() - 1).getEntity().getTransform().setPosition(new Vector3f(column * chunkWidth * 2, 0, row * chunkWidth * 2));
@@ -74,6 +78,13 @@ public class ChunkManager {
 	public void setTexture(Texture texture) {
 		this.texture = texture;
 	}
-	
+
+	public Noise getNoise() {
+		return noise;
+	}
+
+	public void setNoise(Noise noise) {
+		this.noise = noise;
+	}
 	
 }
