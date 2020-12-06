@@ -14,7 +14,7 @@ import niles.lwjgl.util.Texture;
 public class Main extends Game{
 	
 	public Main() {
-		super(720, 480, false);
+		//super(720, 480, false);
 	}
 
 	public static void main(String[] args) {
@@ -41,7 +41,7 @@ public class Main extends Game{
 					addEntityToScene(chunks.getChunks().get(i).getEntity());
 				}
 				
-				addLight(new Vector3f(40, 1000, 800), new Vector3f(0.6f, 0.6f, 1), 180000);
+				addLight(new Vector3f(40, 19000, 800), new Vector3f(1, 1, 1), 18000000);
 				
 				getCamera().getPosition().add(new Vector3f(0, 40, 0));
 			}
@@ -49,12 +49,20 @@ public class Main extends Game{
 			@Override
 			public void update() {
 				simpleCameraRotation(1.5f);
-				simpleCameraMovement(2f);
+				simpleCameraMovement(20f);
 				
 				int playerX = (int) Math.floor(getCamera().getPosition().x / (2 * 16));
 				int playerZ = (int) Math.floor(getCamera().getPosition().z / (2 * 16));
 				
-				int renderDistance = 4;
+				GenerateChuncks(playerX, playerZ, 8);
+				
+				removeChuncks(playerX, playerZ, 24);
+				
+				
+				
+			}
+			
+			public void GenerateChuncks(int playerX, int playerZ, int renderDistance) {
 				for(int x = -renderDistance / 2; x < renderDistance / 2; x++) {
 					for(int z = -renderDistance / 2; z < renderDistance / 2; z++) {
 						if(!chunks.contains(playerX + x, playerZ + z)) {
@@ -63,11 +71,24 @@ public class Main extends Game{
 						}
 					}
 				}
-				
 			}
+			
+			public void removeChuncks(int playerX, int playerZ, int removeDistance) {
+				for(int i = 0; i < chunks.getChunks().size(); i++) {
+					if((Math.abs(chunks.getChunks().get(i).getColumn() - playerX) + Math.abs(chunks.getChunks().get(i).getRow() - playerZ)) / 2 > removeDistance / 2) {
+						delete(chunks.getChunks().get(i).getEntity());
+						chunks.getChunks().remove(i);
+					}
+				}
+			}
+			
+			
 			
 			
 		});
 		
 	}
+	
+	
+	
 }
