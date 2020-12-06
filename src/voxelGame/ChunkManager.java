@@ -31,6 +31,15 @@ public class ChunkManager {
 		chunks.get(chunks.size() - 1).getEntity().addTexture(getTexture());
 		chunks.get(chunks.size() - 1).getEntity().getTransform().setPosition(new Vector3f(column * chunkWidth * 2, 0, row * chunkWidth * 2));
 	}
+	
+	public boolean contains(int column, int row) {
+		for(int i = 0; i < chunks.size(); i++) {
+			if(chunks.get(i).getColumn() == column && chunks.get(i).getRow() == row) {
+				return true;
+			}
+		}
+		return false;
+	}
 
 	
 	

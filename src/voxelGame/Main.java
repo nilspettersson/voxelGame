@@ -14,12 +14,14 @@ import niles.lwjgl.util.Texture;
 public class Main extends Game{
 	
 	public Main() {
-		super(1280, 720, false);
+		super(720, 480, false);
 	}
 
 	public static void main(String[] args) {
 		new Main();
 	}
+	
+	ChunkManager chunks;
 
 	@Override
 	public void init() {
@@ -32,19 +34,7 @@ public class Main extends Game{
 			public void onload() {
 				Shader shader = new MeshShader("block.glsl");
 				
-				ChunkManager chunks = new ChunkManager(16, 256);
-				chunks.addChunk(0, 0);
-				chunks.addChunk(1, 0);
-				chunks.addChunk(1, 1);
-				chunks.addChunk(0, 1);
-				chunks.addChunk(-1, 0);
-				chunks.addChunk(-1, 1);
-				chunks.addChunk(0, 0+1);
-				chunks.addChunk(1, 0+1);
-				chunks.addChunk(1, 1+1);
-				chunks.addChunk(0, 1+1);
-				chunks.addChunk(-1, 0+1);
-				chunks.addChunk(-1, 1+1);
+				chunks = new ChunkManager(16, 256);
 				
 				
 				for(int i = 0; i < chunks.getChunks().size(); i++) {
@@ -53,13 +43,26 @@ public class Main extends Game{
 				
 				addLight(new Vector3f(40, 100, 40), new Vector3f(0.6f, 0.6f, 1), 600);
 				
-				getCamera().getPosition().add(new Vector3f(0, 20, 26));
+				getCamera().getPosition().add(new Vector3f(0, 40, 0));
 			}
 			
 			@Override
 			public void update() {
 				simpleCameraRotation(1f);
 				simpleCameraMovement(0.3f);
+				
+				int playerX = (int) Math.floor(getCamera().getPosition().x / (2 * 16));
+				int playerZ = (int) Math.floor(getCamera().getPosition().z / (2 * 16));
+				
+				int renderDistance = 6;
+				for(int x = -renderDistance / 2; x < renderDistance; x++) {
+					for(int z = -renderDistance / 2; z < renderDistance; z++) {
+						if(!chunks.contains(playerX + x, playerZ + z)) {
+							chunks.addChunk(playerX + x, playerZ + z);
+							addEntityToScene(chunks.getChunks().get(chunks.getChunks().size() - 1).getEntity());
+						}
+					}
+				}
 				
 			}
 			
