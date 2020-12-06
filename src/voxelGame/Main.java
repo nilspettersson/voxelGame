@@ -41,22 +41,22 @@ public class Main extends Game{
 					addEntityToScene(chunks.getChunks().get(i).getEntity());
 				}
 				
-				addLight(new Vector3f(40, 100, 40), new Vector3f(0.6f, 0.6f, 1), 600);
+				addLight(new Vector3f(40, 1000, 800), new Vector3f(0.6f, 0.6f, 1), 180000);
 				
 				getCamera().getPosition().add(new Vector3f(0, 40, 0));
 			}
 			
 			@Override
 			public void update() {
-				simpleCameraRotation(1f);
-				simpleCameraMovement(0.3f);
+				simpleCameraRotation(1.5f);
+				simpleCameraMovement(2f);
 				
 				int playerX = (int) Math.floor(getCamera().getPosition().x / (2 * 16));
 				int playerZ = (int) Math.floor(getCamera().getPosition().z / (2 * 16));
 				
-				int renderDistance = 6;
-				for(int x = -renderDistance / 2; x < renderDistance; x++) {
-					for(int z = -renderDistance / 2; z < renderDistance; z++) {
+				int renderDistance = 4;
+				for(int x = -renderDistance / 2; x < renderDistance / 2; x++) {
+					for(int z = -renderDistance / 2; z < renderDistance / 2; z++) {
 						if(!chunks.contains(playerX + x, playerZ + z)) {
 							chunks.addChunk(playerX + x, playerZ + z);
 							addEntityToScene(chunks.getChunks().get(chunks.getChunks().size() - 1).getEntity());

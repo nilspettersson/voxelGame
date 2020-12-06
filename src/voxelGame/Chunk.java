@@ -43,7 +43,7 @@ public class Chunk {
 					byte blockId = 0;
 					float myX = x + column * width;
 					float myZ = z + row * width;
-					if(y <= (Math.cos(myZ / 10) * Math.cos(myX / 10)) * 4 + 10) {
+					if(y <= Math.abs((Math.sin(myZ / 20) * Math.cos(myX / 20)) * 14 + 0)) {
 						blockId = Block.DIRT;
 					}
 					cells[x][y][z] = blockId;
