@@ -19,12 +19,12 @@ public class Block {
 		}
 		else if(blockId == DIRT) {
 			return new int[] {
-					0, 0,
-					0, 0,
-					0, 0,
-					0, 0,
-					0, 0,
-					0, 0,
+					0, 1,
+					0, 1,
+					0, 1,
+					0, 1,
+					0, 1,
+					0, 1,
 					};
 		}
 		

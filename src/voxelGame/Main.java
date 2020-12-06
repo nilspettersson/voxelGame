@@ -14,7 +14,7 @@ import niles.lwjgl.util.Texture;
 public class Main extends Game{
 	
 	public Main() {
-		//super(720, 480, false);
+		super(1280, 720, false);
 	}
 
 	public static void main(String[] args) {
@@ -53,13 +53,13 @@ public class Main extends Game{
 				
 				addLight(new Vector3f(40, 100, 40), new Vector3f(0.6f, 0.6f, 1), 600);
 				
-				getCamera().getPosition().add(new Vector3f(0, 40, 26));
+				getCamera().getPosition().add(new Vector3f(0, 20, 26));
 			}
 			
 			@Override
 			public void update() {
 				simpleCameraRotation(1f);
-				simpleCameraMovement(0.1f);
+				simpleCameraMovement(0.3f);
 				
 			}
 			

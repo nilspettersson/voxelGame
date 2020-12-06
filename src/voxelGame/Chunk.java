@@ -20,20 +20,20 @@ public class Chunk {
 	private int height;
 	
 	public Chunk(int width, int height, int column, int row) {
-		//mesh = new Geometry(width * width * height * 36);
-		mesh = new Geometry(800);
+		this.column = column;
+		this.row = row;
+		
+		this.width = width;
+		this.height = height;
+		
+		mesh = new Geometry(80);
 		entity = new Entity(0, shader);
 		
 		//[x][y][z]
 		cells = new byte[width][height][width];
 		
 		generateTerain();
-		
-		this.column = column;
-		this.row = row;
-		
-		this.width = width;
-		this.height = height;
+		addGrass();
 	}
 	
 	public void generateTerain() {
@@ -41,10 +41,25 @@ public class Chunk {
 			for(int y = 0; y < cells[0].length; y++) {
 				for(int z = 0; z < cells[0][0].length; z++) {
 					byte blockId = 0;
-					if(y <= 3) {
-						blockId = Block.GRASS;
+					float myX = x + column * width;
+					float myZ = z + row * width;
+					if(y <= (Math.cos(myZ / 10) * Math.cos(myX / 10)) * 4 + 10) {
+						blockId = Block.DIRT;
 					}
 					cells[x][y][z] = blockId;
+				}
+			}
+		}
+	}
+	
+	public void addGrass() {
+		for(int x = 0; x < cells.length; x++) {
+			for(int y = 0; y < cells[0].length; y++) {
+				for(int z = 0; z < cells[0][0].length; z++) {
+					byte blockId = 0;
+					if(cells[x][y][z] == Block.DIRT && cells[x][y + 1][z] == Block.Air) {
+						cells[x][y][z] = Block.GRASS;
+					}
 				}
 			}
 		}
@@ -61,7 +76,6 @@ public class Chunk {
 					float newY = y * 2;
 					float newZ = z * 2;
 					if(cells[x][y][z] != Block.Air) {
-						//System.out.println(mesh.getVertices().limit());
 						
 						int[] sprite = Block.getBlockSprite(cells[x][y][z]);
 						
