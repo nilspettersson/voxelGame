@@ -2,19 +2,15 @@ package voxelGame;
 
 import org.joml.Vector3f;
 import org.joml.Vector4f;
-
-import niles.lwjgl.entity.Entity;
-import niles.lwjgl.entity.Geometry;
 import niles.lwjgl.loop.Game;
 import niles.lwjgl.loop.Scene;
 import niles.lwjgl.npsl.MeshShader;
 import niles.lwjgl.npsl.Shader;
-import niles.lwjgl.util.Texture;
 
 public class Main extends Game{
 	
 	public Main() {
-		super(720, 480, false);
+		//super(720, 480, false);
 	}
 
 	public static void main(String[] args) {
@@ -48,7 +44,7 @@ public class Main extends Game{
 			
 			@Override
 			public void update() {
-				//simpleCameraRotation(1.5f);
+				simpleCameraRotation(1.5f);
 				simpleCameraMovement(1.6f);
 				
 				int playerX = (int) Math.floor(getCamera().getPosition().x / (2 * 16));

@@ -26,7 +26,7 @@ public class NoiseTesting extends Game {
 			protected void onload() {
 				int size = 200;
 				
-				Noise noise = new Noise();
+				Noise noise = new Noise(0);
 				
 				for(int x = 0; x < size; x++) {
 					for(int y = 0; y < size; y++) {

@@ -6,8 +6,8 @@ public class Noise {
 	
 	OpenSimplexNoise noise;
 	
-	public Noise() {
-		noise = new OpenSimplexNoise(0);
+	public Noise(long seed) {
+		noise = new OpenSimplexNoise(seed);
 	}
 	
 	public float getHeightAt(float x, float y, float size) {
@@ -32,7 +32,7 @@ public class Noise {
 		
 		value *= 0.5;
 		value += 0.5;
-		value = (float) Math.pow(value, 1);
+		value = (float) Math.pow(value, 4);
 		return Math.max(value, 0);
 	}
 

@@ -17,7 +17,7 @@ public class ChunkManager {
 	
 	public ChunkManager(int chunkWidth, int chunkHeight) {
 		chunks = new ArrayList<Chunk>();
-		noise = new Noise();
+		noise = new Noise(0);
 		
 		texture.setSpriteWidth(16);
 		texture.setSpriteHeight(16);

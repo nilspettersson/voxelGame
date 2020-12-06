@@ -1,5 +1,7 @@
 package voxelGame;
 
+import org.joml.Vector3f;
+
 import niles.lwjgl.entity.Entity;
 import niles.lwjgl.entity.Geometry;
 import niles.lwjgl.npsl.MeshShader;
@@ -37,7 +39,7 @@ public class Chunk {
 		cells = new byte[width][height][width];
 		
 		generateTerain();
-		addGrass();
+		addBlockTypes();
 	}
 	
 	public void generateTerain() {
@@ -52,9 +54,12 @@ public class Chunk {
 					if(height > this.height - 4) {
 						height = this.height - 4;
 					}
+					
+					
 					if(y <= height) {
 						blockId = Block.ROCK;
 					}
+					
 					
 					cells[x][y][z] = blockId;
 				}
@@ -62,13 +67,52 @@ public class Chunk {
 		}
 	}
 	
-	public void addGrass() {
+	public void addBlockTypes() {
 		for(int x = 0; x < cells.length; x++) {
 			for(int y = 0; y < cells[0].length; y++) {
 				for(int z = 0; z < cells[0][0].length; z++) {
 					byte blockId = 0;
-					if(cells[x][y][z] == Block.ROCK && cells[x][y + 1][z] == Block.Air) {
-						cells[x][y][z] = Block.GRASS;
+					if(cells[x][y][z] == Block.ROCK && (cells[x][y + 1][z] == Block.Air || cells[x][y + 1][z] == Block.WATER)) {
+						
+						float myX = x + column * width;
+						float myZ = z + row * width;
+						float value = noise.getBiomeAt(myX, myZ, 12f) * 0.6f;
+						if(Biome.getBiome(value) == Biome.GRASS) {
+							cells[x][y][z] = Block.GRASS;
+							
+							if(cells[x][y - 1][z] == Block.ROCK) {
+								cells[x][y - 1][z] = Block.DIRT;
+							}
+							if(cells[x][y - 2][z] == Block.ROCK) {
+								cells[x][y - 2][z] = Block.DIRT;
+							}
+							if(cells[x][y - 3][z] == Block.ROCK) {
+								cells[x][y - 3][z] = Block.DIRT;
+							}
+							if(cells[x][y - 4][z] == Block.ROCK) {
+								cells[x][y - 4][z] = Block.DIRT;
+							}
+						}
+						else if(Biome.getBiome(value) == Biome.ROCK) {
+							cells[x][y][z] = Block.ROCK;
+							
+							if(cells[x][y - 1][z] == Block.ROCK) {
+								cells[x][y - 1][z] = Block.ROCK;
+							}
+							if(cells[x][y - 2][z] == Block.ROCK) {
+								cells[x][y - 2][z] = Block.ROCK;
+							}
+							if(cells[x][y - 3][z] == Block.ROCK) {
+								cells[x][y - 3][z] = Block.ROCK;
+							}
+							if(cells[x][y - 4][z] == Block.ROCK) {
+								cells[x][y - 4][z] = Block.ROCK;
+							}
+						}
+						
+						
+						
+						/*cells[x][y][z] = Block.GRASS;
 						
 						if(cells[x][y - 1][z] == Block.ROCK) {
 							cells[x][y - 1][z] = Block.DIRT;
@@ -81,7 +125,12 @@ public class Chunk {
 						}
 						if(cells[x][y - 4][z] == Block.ROCK) {
 							cells[x][y - 4][z] = Block.DIRT;
-						}
+						}*/
+						
+						
+					}
+					else if(y <= 8 && cells[x][y][z] == Block.Air) {
+						cells[x][y][z] = Block.WATER;
 					}
 					
 				}
@@ -100,25 +149,31 @@ public class Chunk {
 					float newY = y * 2;
 					float newZ = z * 2;
 					if(cells[x][y][z] != Block.Air) {
-						
 						int[] sprite = Block.getBlockSprite(cells[x][y][z]);
 						
-						if(z == 0 || cells[x][y][z - 1] == Block.Air) {
+						if(cells[x][y][z] == Block.WATER) {
+							/*if(cells[x][y + 1][z] != Block.WATER) {
+								mesh.createFaceUp(newX, newY, newZ, texture,  sprite[8],  sprite[9]);
+							}*/
+							continue;
+						}
+						
+						if(z == 0 || cells[x][y][z - 1] == Block.Air || cells[x][y][z - 1] == Block.WATER) {
 							mesh.createFaceBack(newX, newY, newZ, texture, sprite[0],  sprite[1]);
 						}
-						if(z == width - 1 || cells[x][y][z + 1] == Block.Air) {
+						if(z == width - 1 || cells[x][y][z + 1] == Block.Air || cells[x][y][z + 1] == Block.WATER) {
 							mesh.createFaceFront(newX, newY, newZ, texture,  sprite[2],  sprite[3]);
 						}
-						if(x == 0 || cells[x - 1][y][z] == Block.Air) {
+						if(x == 0 || cells[x - 1][y][z] == Block.Air || cells[x - 1][y][z] == Block.WATER) {
 							mesh.createFaceLeft(newX, newY, newZ, texture,  sprite[4],  sprite[5]);
 						}
-						if(x == width - 1 || cells[x + 1][y][z] == Block.Air) {
+						if(x == width - 1 || cells[x + 1][y][z] == Block.Air || cells[x + 1][y][z] == Block.WATER) {
 							mesh.createFaceRight(newX, newY, newZ, texture,  sprite[6],  sprite[7]);
 						}
-						if(y == height - 1 || cells[x][y + 1][z] == Block.Air) {
+						if(y == height - 1 || cells[x][y + 1][z] == Block.Air || cells[x][y + 1][z] == Block.WATER) {
 							mesh.createFaceUp(newX, newY, newZ, texture,  sprite[8],  sprite[9]);
 						}
-						if(y == 0 || cells[x][y - 1][z] == Block.Air) {
+						if(y == 0 || cells[x][y - 1][z] == Block.Air || cells[x][y - 1][z] == Block.WATER) {
 							mesh.createFaceDown(newX, newY, newZ, texture,  sprite[10],  sprite[11]);
 						}
 						
@@ -126,6 +181,40 @@ public class Chunk {
 				}
 			}
 		}
+		
+		
+		
+		
+		for(int x = 0; x < cells.length; x++) {
+			for(int y = 0; y < cells[0].length; y++) {
+				for(int z = 0; z < cells[0][0].length; z++) {
+					
+					
+					float newX = x * 2;
+					float newY = y * 2;
+					float newZ = z * 2;
+					if(cells[x][y][z] != Block.Air) {
+						int[] sprite = Block.getBlockSprite(cells[x][y][z]);
+						
+						if(cells[x][y][z] == Block.WATER) {
+							if(/*y == height - 1 ||*/ /*cells[x][y + 1][z] == Block.Air ||*/ cells[x][y + 1][z] != Block.WATER) {
+								mesh.createFaceUp(newX, newY, newZ, texture,  sprite[8],  sprite[9]);
+							}
+							continue;
+						}
+						
+						
+					}
+				}
+			}
+		}
+		
+		
+		
+		
+		
+		
+		
 		entity.setGeometry(mesh);
 		entity.bindGeometry();
 	}
