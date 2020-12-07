@@ -38,7 +38,7 @@ public class Main extends Game{
 					addtransparentEntityToScene(chunks.getChunks().get(i).getWater());
 				}
 				
-				addLight(new Vector3f(40, 19000, 800), new Vector3f(1, 1, 1), 18000000);
+				addLight(new Vector3f(40, 19000, 800), new Vector3f(1, 1, 1), 10000000);
 				
 				getCamera().getPosition().add(new Vector3f(0, 40, 0));
 			}
@@ -50,7 +50,7 @@ public class Main extends Game{
 				int playerZ = (int) Math.floor(getCamera().getPosition().z / (2 * 16));
 				
 				GenerateChuncks(playerX, playerZ, 14);
-				//removeChuncks(playerX, playerZ, 18);
+				removeChuncks(playerX, playerZ, 18);
 				
 				
 				simpleCameraRotation(1.5f);

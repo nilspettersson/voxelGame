@@ -34,7 +34,8 @@ public class NoiseTesting extends Game {
 						e.getGeometry().createFace(x * 2f, y * 2f, -280);
 						e.bindGeometry();
 						
-						float value = noise.getBiomeAt(x, y, 2f);
+						/*float value = noise.getBiomeAt(x, y, 2f);
+						
 						Vector3f color = new Vector3f();
 						if(Biome.getBiome(value) == Biome.GRASS) {
 							color.set(0, 1, 0);
@@ -43,7 +44,12 @@ public class NoiseTesting extends Game {
 							color.set(0.8f, 0.8f, 0.8f);
 						}
 						
-						e.getMaterial().setProperty("value", new Vector3f(color));
+						e.getMaterial().setProperty("value", new Vector3f(color));*/
+						
+						float value = noise.getHeightAt(x, y, 2f);
+						value = noise.getHeightAt(x, y, value);
+						
+						e.getMaterial().setProperty("value", new Vector3f(value));
 						
 						addEntityToScene(e);
 					}

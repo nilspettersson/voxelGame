@@ -5,6 +5,8 @@ public class Biome {
 	public static final int GRASS = 0;
 	public static final int ROCK = 1;
 	
+	public static final int WATERLEVEL = 14;
+	
 	public static int getBiome(float noise) {
 		if(Math.abs(GRASS - noise) < Math.abs(ROCK - noise)) {
 			return GRASS;
@@ -48,6 +50,13 @@ public class Biome {
 				cells[x][y - 4][z] = Block.ROCK;
 			}
 		}
+		
+		if(y <= WATERLEVEL + 1) {
+			cells[x][y][z] = Block.SAND;
+		}
+		
+		
+		
 	}
 	
 	

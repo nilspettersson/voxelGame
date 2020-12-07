@@ -54,7 +54,8 @@ public class Chunk {
 					float myX = x + column * width;
 					float myZ = z + row * width;
 					
-					float height = noise.getHeightAt(myX, myZ, 2) * 10f + 4;
+					float height = noise.getHeightAt(myX, myZ, 0.3f) * 10f + 0;
+					
 					if(height > this.height - 4) {
 						height = this.height - 4;
 					}
@@ -85,7 +86,7 @@ public class Chunk {
 						Biome.heightBlockRules(cells, x, y, z, Biome.getBiome(value));
 
 					}
-					else if(y <= 8 && cells[x][y][z] == Block.Air) {
+					else if(y <= Biome.WATERLEVEL && cells[x][y][z] == Block.Air) {
 						cells[x][y][z] = Block.WATER;
 					}
 					
