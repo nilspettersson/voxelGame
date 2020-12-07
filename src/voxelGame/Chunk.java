@@ -81,61 +81,14 @@ public class Chunk {
 						float myX = x + column * width;
 						float myZ = z + row * width;
 						float value = noise.getBiomeAt(myX, myZ, 12f) * 0.6f;
-						if(Biome.getBiome(value) == Biome.GRASS) {
-							cells[x][y][z] = Block.GRASS;
-							
-							if(cells[x][y - 1][z] == Block.ROCK) {
-								cells[x][y - 1][z] = Block.DIRT;
-							}
-							if(cells[x][y - 2][z] == Block.ROCK) {
-								cells[x][y - 2][z] = Block.DIRT;
-							}
-							if(cells[x][y - 3][z] == Block.ROCK) {
-								cells[x][y - 3][z] = Block.DIRT;
-							}
-							if(cells[x][y - 4][z] == Block.ROCK) {
-								cells[x][y - 4][z] = Block.DIRT;
-							}
-						}
-						else if(Biome.getBiome(value) == Biome.ROCK) {
-							cells[x][y][z] = Block.ROCK;
-							
-							if(cells[x][y - 1][z] == Block.ROCK) {
-								cells[x][y - 1][z] = Block.ROCK;
-							}
-							if(cells[x][y - 2][z] == Block.ROCK) {
-								cells[x][y - 2][z] = Block.ROCK;
-							}
-							if(cells[x][y - 3][z] == Block.ROCK) {
-								cells[x][y - 3][z] = Block.ROCK;
-							}
-							if(cells[x][y - 4][z] == Block.ROCK) {
-								cells[x][y - 4][z] = Block.ROCK;
-							}
-						}
 						
-						
-						
-						/*cells[x][y][z] = Block.GRASS;
-						
-						if(cells[x][y - 1][z] == Block.ROCK) {
-							cells[x][y - 1][z] = Block.DIRT;
-						}
-						if(cells[x][y - 2][z] == Block.ROCK) {
-							cells[x][y - 2][z] = Block.DIRT;
-						}
-						if(cells[x][y - 3][z] == Block.ROCK) {
-							cells[x][y - 3][z] = Block.DIRT;
-						}
-						if(cells[x][y - 4][z] == Block.ROCK) {
-							cells[x][y - 4][z] = Block.DIRT;
-						}*/
-						
-						
+						Biome.heightBlockRules(cells, x, y, z, Biome.getBiome(value));
+
 					}
 					else if(y <= 8 && cells[x][y][z] == Block.Air) {
 						cells[x][y][z] = Block.WATER;
 					}
+					
 					
 				}
 			}
@@ -163,22 +116,22 @@ public class Chunk {
 						}
 						
 						if(z == 0 || cells[x][y][z - 1] == Block.Air || cells[x][y][z - 1] == Block.WATER) {
-							mesh.createFaceBack(newX, newY, newZ, texture, sprite[0],  sprite[1]);
+							entity.getGeometry().createFaceBack(newX, newY, newZ, texture, sprite[0],  sprite[1]);
 						}
 						if(z == width - 1 || cells[x][y][z + 1] == Block.Air || cells[x][y][z + 1] == Block.WATER) {
-							mesh.createFaceFront(newX, newY, newZ, texture,  sprite[2],  sprite[3]);
+							entity.getGeometry().createFaceFront(newX, newY, newZ, texture,  sprite[2],  sprite[3]);
 						}
 						if(x == 0 || cells[x - 1][y][z] == Block.Air || cells[x - 1][y][z] == Block.WATER) {
-							mesh.createFaceLeft(newX, newY, newZ, texture,  sprite[4],  sprite[5]);
+							entity.getGeometry().createFaceLeft(newX, newY, newZ, texture,  sprite[4],  sprite[5]);
 						}
 						if(x == width - 1 || cells[x + 1][y][z] == Block.Air || cells[x + 1][y][z] == Block.WATER) {
-							mesh.createFaceRight(newX, newY, newZ, texture,  sprite[6],  sprite[7]);
+							entity.getGeometry().createFaceRight(newX, newY, newZ, texture,  sprite[6],  sprite[7]);
 						}
 						if(y == height - 1 || cells[x][y + 1][z] == Block.Air || cells[x][y + 1][z] == Block.WATER) {
-							mesh.createFaceUp(newX, newY, newZ, texture,  sprite[8],  sprite[9]);
+							entity.getGeometry().createFaceUp(newX, newY, newZ, texture,  sprite[8],  sprite[9]);
 						}
 						if(y == 0 || cells[x][y - 1][z] == Block.Air || cells[x][y - 1][z] == Block.WATER) {
-							mesh.createFaceDown(newX, newY, newZ, texture,  sprite[10],  sprite[11]);
+							entity.getGeometry().createFaceDown(newX, newY, newZ, texture,  sprite[10],  sprite[11]);
 						}
 						
 					}
@@ -188,39 +141,12 @@ public class Chunk {
 		
 		
 		
-		entity.setGeometry(mesh);
+		//entity.setGeometry(mesh);
 		entity.bindGeometry();
 		
 		water.bindGeometry();
 	}
 	
-	
-	public void generateWater222(Entity water, Texture texture) {
-		for(int x = 0; x < cells.length; x++) {
-			for(int y = 0; y < cells[0].length; y++) {
-				for(int z = 0; z < cells[0][0].length; z++) {
-					float newX = x * 2;
-					float newY = y * 2;
-					float newZ = z * 2;
-					if(cells[x][y][z] != Block.Air) {
-						int[] sprite = Block.getBlockSprite(cells[x][y][z]);
-						
-						if(cells[x][y][z] == Block.WATER) {
-							if(/*y == height - 1 ||*/ /*cells[x][y + 1][z] == Block.Air ||*/ cells[x][y + 1][z] != Block.WATER) {
-								water.getGeometry().createFaceUp(newX + column * width * 2, newY, newZ + row * width * 2, texture,  sprite[8],  sprite[9]);
-							}
-							continue;
-						}
-						
-						
-					}
-				}
-			}
-		}
-		
-		water.bindGeometry();
-		
-	}
 	
 
 	public Geometry getMesh() {

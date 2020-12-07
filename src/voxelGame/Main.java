@@ -50,7 +50,7 @@ public class Main extends Game{
 				int playerZ = (int) Math.floor(getCamera().getPosition().z / (2 * 16));
 				
 				GenerateChuncks(playerX, playerZ, 14);
-				removeChuncks(playerX, playerZ, 18);
+				//removeChuncks(playerX, playerZ, 18);
 				
 				
 				simpleCameraRotation(1.5f);
