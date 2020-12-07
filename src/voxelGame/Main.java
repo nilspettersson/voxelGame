@@ -44,18 +44,20 @@ public class Main extends Game{
 			
 			@Override
 			public void update() {
-				simpleCameraRotation(1.5f);
-				simpleCameraMovement(1.6f);
+				//water needs to be rendered separate because of transparency
+				for(int i = 0; i < chunks.getChunks().size(); i++) {
+					render(chunks.getChunks().get(i).getWater());
+				}
 				
 				int playerX = (int) Math.floor(getCamera().getPosition().x / (2 * 16));
 				int playerZ = (int) Math.floor(getCamera().getPosition().z / (2 * 16));
 				
 				GenerateChuncks(playerX, playerZ, 14);
-				
 				removeChuncks(playerX, playerZ, 18);
 				
 				
-				
+				simpleCameraRotation(1.5f);
+				simpleCameraMovement(1.6f);
 			}
 			
 			public void GenerateChuncks(int playerX, int playerZ, int renderDistance) {

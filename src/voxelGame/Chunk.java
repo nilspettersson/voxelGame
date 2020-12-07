@@ -15,6 +15,8 @@ public class Chunk {
 	private Geometry mesh;
 	private Shader shader = new MeshShader("block.glsl");
 	
+	private Entity water;
+	
 	private byte[][][] cells;
 	private int column;
 	private int row;
@@ -34,6 +36,8 @@ public class Chunk {
 		
 		mesh = new Geometry(80);
 		entity = new Entity(0, shader);
+		
+		water = new Entity(0, shader);
 		
 		//[x][y][z]
 		cells = new byte[width][height][width];
@@ -152,9 +156,9 @@ public class Chunk {
 						int[] sprite = Block.getBlockSprite(cells[x][y][z]);
 						
 						if(cells[x][y][z] == Block.WATER) {
-							/*if(cells[x][y + 1][z] != Block.WATER) {
-								mesh.createFaceUp(newX, newY, newZ, texture,  sprite[8],  sprite[9]);
-							}*/
+							if(cells[x][y + 1][z] != Block.WATER) {
+								water.getGeometry().createFaceUp(newX, newY, newZ, texture,  sprite[8],  sprite[9]);
+							}
 							continue;
 						}
 						
@@ -184,12 +188,17 @@ public class Chunk {
 		
 		
 		
+		entity.setGeometry(mesh);
+		entity.bindGeometry();
 		
+		water.bindGeometry();
+	}
+	
+	
+	public void generateWater222(Entity water, Texture texture) {
 		for(int x = 0; x < cells.length; x++) {
 			for(int y = 0; y < cells[0].length; y++) {
 				for(int z = 0; z < cells[0][0].length; z++) {
-					
-					
 					float newX = x * 2;
 					float newY = y * 2;
 					float newZ = z * 2;
@@ -198,7 +207,7 @@ public class Chunk {
 						
 						if(cells[x][y][z] == Block.WATER) {
 							if(/*y == height - 1 ||*/ /*cells[x][y + 1][z] == Block.Air ||*/ cells[x][y + 1][z] != Block.WATER) {
-								mesh.createFaceUp(newX, newY, newZ, texture,  sprite[8],  sprite[9]);
+								water.getGeometry().createFaceUp(newX + column * width * 2, newY, newZ + row * width * 2, texture,  sprite[8],  sprite[9]);
 							}
 							continue;
 						}
@@ -209,15 +218,10 @@ public class Chunk {
 			}
 		}
 		
+		water.bindGeometry();
 		
-		
-		
-		
-		
-		
-		entity.setGeometry(mesh);
-		entity.bindGeometry();
 	}
+	
 
 	public Geometry getMesh() {
 		return mesh;
@@ -257,6 +261,14 @@ public class Chunk {
 
 	public void setEntity(Entity entity) {
 		this.entity = entity;
+	}
+
+	public Entity getWater() {
+		return water;
+	}
+
+	public void setWater(Entity water) {
+		this.water = water;
 	}
 	
 	
