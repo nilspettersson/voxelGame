@@ -54,6 +54,9 @@ public class Biome {
 		if(y <= WATERLEVEL + 1) {
 			cells[x][y][z] = Block.SAND;
 		}
+		else if(y > 45) {
+			cells[x][y][z] = Block.SNOW;
+		}
 		
 		
 		
