@@ -35,6 +35,7 @@ public class Main extends Game{
 				
 				for(int i = 0; i < chunks.getChunks().size(); i++) {
 					addEntityToScene(chunks.getChunks().get(i).getEntity());
+					addtransparentEntityToScene(chunks.getChunks().get(i).getWater());
 				}
 				
 				addLight(new Vector3f(40, 19000, 800), new Vector3f(1, 1, 1), 18000000);
@@ -44,10 +45,6 @@ public class Main extends Game{
 			
 			@Override
 			public void update() {
-				//water needs to be rendered separate because of transparency
-				for(int i = 0; i < chunks.getChunks().size(); i++) {
-					render(chunks.getChunks().get(i).getWater());
-				}
 				
 				int playerX = (int) Math.floor(getCamera().getPosition().x / (2 * 16));
 				int playerZ = (int) Math.floor(getCamera().getPosition().z / (2 * 16));
@@ -66,6 +63,7 @@ public class Main extends Game{
 						if(!chunks.contains(playerX + x, playerZ + z)) {
 							chunks.addChunk(playerX + x, playerZ + z);
 							addEntityToScene(chunks.getChunks().get(chunks.getChunks().size() - 1).getEntity());
+							addtransparentEntityToScene(chunks.getChunks().get(chunks.getChunks().size() - 1).getWater());
 						}
 					}
 				}
@@ -75,18 +73,16 @@ public class Main extends Game{
 				for(int i = 0; i < chunks.getChunks().size(); i++) {
 					if((Math.abs(chunks.getChunks().get(i).getColumn() - playerX) + Math.abs(chunks.getChunks().get(i).getRow() - playerZ)) / 2 > removeDistance / 2) {
 						delete(chunks.getChunks().get(i).getEntity());
+						delete(chunks.getChunks().get(i).getWater());
 						chunks.getChunks().remove(i);
 					}
 				}
 			}
 			
 			
-			
-			
 		});
 		
 	}
-	
 	
 	
 }
