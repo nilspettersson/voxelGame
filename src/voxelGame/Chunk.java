@@ -53,7 +53,9 @@ public class Chunk {
 		rightCells = new byte[1][height][width];
 		
 		generateTerain();
+		generateCaves();
 		addBlockTypes();
+		
 	}
 	
 	public void generateTerain() {
@@ -143,11 +145,60 @@ public class Chunk {
 						float myZ = z + row * width;
 						float value = noise.getBiomeAt(myX, myZ, 12f) * 0.6f;
 						
-						Biome.heightBlockRules(cells, x, y, z, Biome.getBiome(value));
+						if(y > 4) {
+							Biome.heightBlockRules(cells, x, y, z, Biome.getBiome(value));
+						}
 
 					}
 					else if(y <= Biome.WATERLEVEL && cells[x][y][z] == Block.Air) {
 						cells[x][y][z] = Block.WATER;
+					}
+					
+					
+				}
+			}
+		}
+	}
+	
+	public void generateCaves() {
+		for(int x = 0; x < cells.length; x++) {
+			for(int y = 0; y < cells[0].length; y++) {
+				for(int z = 0; z < cells[0][0].length; z++) {
+					float myX = x + column * width;
+					float myZ = z + row * width;
+					
+					float cave = noise.getCaveAt(myX, myZ, y, 1f) * 1f + 0;
+					if(cave > 4) {
+						cells[x][y][z] = Block.Air;
+					}
+					
+					//adding neighboring cells
+					if(x == 0) {
+						if(cave > 4) {
+							cave = noise.getCaveAt(myX - 1, myZ, y, 1f) * 1f + 0;
+							leftCells[0][y][z] = Block.Air;
+						}
+					}
+					if(x == width - 1) {
+						cave = noise.getCaveAt(myX + 1, myZ, y, 1f) * 1f + 0;
+						if(cave > 4) {
+							rightCells[0][y][z] = Block.Air;
+						}
+					}
+					
+					
+					if(z == 0) {
+						cave = noise.getCaveAt(myX, myZ - 1, y, 1f) * 1f + 0;
+						if(cave > 4) {
+							backCells[x][y][0] = Block.Air;
+						}
+					}
+					
+					if(z == width - 1) {
+						cave = noise.getCaveAt(myX, myZ + 1, y, 1f) * 1f + 0;
+						if(cave > 4) {
+							frontCells[x][y][0] = Block.Air;
+						}
 					}
 					
 					

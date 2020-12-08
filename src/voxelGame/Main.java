@@ -10,7 +10,7 @@ import niles.lwjgl.npsl.Shader;
 public class Main extends Game{
 	
 	public Main() {
-		super(720, 480, false);
+		//super(720, 480, false);
 	}
 
 	public static void main(String[] args) {
@@ -50,7 +50,7 @@ public class Main extends Game{
 				
 				
 				
-				//simpleCameraRotation(1.5f);
+				simpleCameraRotation(1.5f);
 				simpleCameraMovement(1.6f);
 			}
 			
@@ -61,7 +61,7 @@ public class Main extends Game{
 							chunks.addChunk(playerX + x, playerZ + z);
 							addEntityToScene(chunks.getChunks().get(chunks.getChunks().size() - 1).getEntity());
 							addtransparentEntityToScene(chunks.getChunks().get(chunks.getChunks().size() - 1).getWater());
-							//return;
+							return;
 						}
 					}
 				}
