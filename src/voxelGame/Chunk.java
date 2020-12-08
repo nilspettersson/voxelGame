@@ -26,7 +26,7 @@ public class Chunk {
 	
 	
 	
-	//how many blocks one chunk containes.
+	//how many blocks one chunk contains.
 	private int width;
 	private int height;
 	
@@ -47,6 +47,11 @@ public class Chunk {
 		//[x][y][z]
 		cells = new byte[width][height][width];
 		
+		frontCells = new byte[width][height][1];
+		backCells = new byte[width][height][1];
+		leftCells = new byte[1][height][width];
+		rightCells = new byte[1][height][width];
+		
 		generateTerain();
 		addBlockTypes();
 	}
@@ -55,23 +60,73 @@ public class Chunk {
 		for(int x = 0; x < cells.length; x++) {
 			for(int y = 0; y < cells[0].length; y++) {
 				for(int z = 0; z < cells[0][0].length; z++) {
-					byte blockId = 0;
+					byte blockId = Block.Air;
 					float myX = x + column * width;
 					float myZ = z + row * width;
 					
 					float height = noise.getHeightAt(myX, myZ, 0.3f) * 10f + 0;
-					
 					if(height > this.height - 4) {
 						height = this.height - 4;
 					}
-					
-					
 					if(y <= height) {
 						blockId = Block.ROCK;
 					}
 					
-					
 					cells[x][y][z] = blockId;
+					
+					
+					//adding neighboring cells
+					if(x == 0) {
+						blockId = Block.Air;
+						height = noise.getHeightAt(myX - 1, myZ, 0.3f) * 10f + 0;
+						if(height > this.height - 4) {
+							height = this.height - 4;
+						}
+						if(y <= height) {
+							blockId = Block.ROCK;
+						}
+						leftCells[0][y][z] = blockId;
+					}
+					if(x == width - 1) {
+						
+						blockId = Block.Air;
+						height = noise.getHeightAt(myX + 1, myZ, 0.3f) * 10f + 0;
+						if(height > this.height - 4) {
+							height = this.height - 4;
+						}
+						
+						if(y <= height) {
+							blockId = Block.ROCK;
+						}
+						rightCells[0][y][z] = blockId;
+					}
+					
+					
+					if(z == 0) {
+						blockId = Block.Air;
+						height = noise.getHeightAt(myX, myZ - 1, 0.3f) * 10f + 0;
+						if(height > this.height - 4) {
+							height = this.height - 4;
+						}
+						if(y <= height) {
+							blockId = Block.ROCK;
+						}
+						backCells[x][y][0] = blockId;
+					}
+					
+					if(z == width - 1) {
+						blockId = Block.Air;
+						height = noise.getHeightAt(myX, myZ + 1, 0.3f) * 10f + 0;
+						if(height > this.height - 4) {
+							height = this.height - 4;
+						}
+						if(y <= height) {
+							blockId = Block.ROCK;
+						}
+						frontCells[x][y][0] = blockId;
+					}
+					
+					
 				}
 			}
 		}
@@ -121,23 +176,50 @@ public class Chunk {
 							continue;
 						}
 						
+						//back
 						if(z != 0) {
 							if(z == 0 || cells[x][y][z - 1] == Block.Air || cells[x][y][z - 1] == Block.WATER) {
 								entity.getGeometry().createFaceBack(newX, newY, newZ, texture, sprite[0],  sprite[1]);
 							}
 						}
+						else {
+							if(backCells[x][y][0] == Block.Air || backCells[x][y][0] == Block.WATER) {
+								entity.getGeometry().createFaceBack(newX, newY, newZ, texture, sprite[0],  sprite[1]);
+							}
+						}
+						
+						//front
 						if(z != width - 1)  {
 							if(z == width - 1 || cells[x][y][z + 1] == Block.Air || cells[x][y][z + 1] == Block.WATER) {
 								entity.getGeometry().createFaceFront(newX, newY, newZ, texture,  sprite[2],  sprite[3]);
 							}
 						}
+						else {
+							if(frontCells[x][y][0] == Block.Air || frontCells[x][y][0] == Block.WATER) {
+								entity.getGeometry().createFaceFront(newX, newY, newZ, texture, sprite[0],  sprite[1]);
+							}
+						}
+						
+						//left
 						if(x != 0) {
 							if(x == 0 || cells[x - 1][y][z] == Block.Air || cells[x - 1][y][z] == Block.WATER) {
 								entity.getGeometry().createFaceLeft(newX, newY, newZ, texture,  sprite[4],  sprite[5]);
 							}
 						}
+						else {
+							if(leftCells[0][y][z] == Block.Air || leftCells[0][y][z] == Block.WATER) {
+								entity.getGeometry().createFaceLeft(newX, newY, newZ, texture,  sprite[4],  sprite[5]);
+							}
+						}
+						
+						//right
 						if(x != width - 1) {
 							if(x == width - 1 || cells[x + 1][y][z] == Block.Air || cells[x + 1][y][z] == Block.WATER) {
+								entity.getGeometry().createFaceRight(newX, newY, newZ, texture,  sprite[6],  sprite[7]);
+							}
+						}
+						else {
+							if(rightCells[0][y][z] == Block.Air || rightCells[0][y][z] == Block.WATER) {
 								entity.getGeometry().createFaceRight(newX, newY, newZ, texture,  sprite[6],  sprite[7]);
 							}
 						}
@@ -145,6 +227,7 @@ public class Chunk {
 						if(y == height - 1 || cells[x][y + 1][z] == Block.Air || cells[x][y + 1][z] == Block.WATER) {
 							entity.getGeometry().createFaceUp(newX, newY, newZ, texture,  sprite[8],  sprite[9]);
 						}
+						
 						if(y > 0 && (cells[x][y - 1][z] == Block.Air || cells[x][y - 1][z] == Block.WATER)) {
 							entity.getGeometry().createFaceDown(newX, newY, newZ, texture,  sprite[10],  sprite[11]);
 						}
@@ -154,14 +237,9 @@ public class Chunk {
 			}
 		}
 		
-		
-		
-		//entity.setGeometry(mesh);
 		entity.bindGeometry();
-		
 		water.bindGeometry();
 	}
-	
 	
 
 
