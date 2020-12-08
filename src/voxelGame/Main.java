@@ -10,10 +10,11 @@ import niles.lwjgl.npsl.Shader;
 public class Main extends Game{
 	
 	public Main() {
-		//super(720, 480, false);
+		super(720, 480, false);
 	}
 
 	public static void main(String[] args) {
+		
 		new Main();
 	}
 	
@@ -32,15 +33,9 @@ public class Main extends Game{
 				
 				chunks = new ChunkManager(16, 256);
 				
-				
-				for(int i = 0; i < chunks.getChunks().size(); i++) {
-					addEntityToScene(chunks.getChunks().get(i).getEntity());
-					addtransparentEntityToScene(chunks.getChunks().get(i).getWater());
-				}
-				
-				addLight(new Vector3f(40, 19000, 800), new Vector3f(1, 1, 1), 10000000);
-				
+				addLight(new Vector3f(40, 19000, 800), new Vector3f(1, 1, 0.9f), 10000000);
 				getCamera().getPosition().add(new Vector3f(0, 40, 0));
+				
 			}
 			
 			@Override
@@ -53,7 +48,9 @@ public class Main extends Game{
 				removeChuncks(playerX, playerZ, 18);
 				
 				
-				simpleCameraRotation(1.5f);
+				
+				
+				//simpleCameraRotation(1.5f);
 				simpleCameraMovement(1.6f);
 			}
 			
@@ -64,6 +61,7 @@ public class Main extends Game{
 							chunks.addChunk(playerX + x, playerZ + z);
 							addEntityToScene(chunks.getChunks().get(chunks.getChunks().size() - 1).getEntity());
 							addtransparentEntityToScene(chunks.getChunks().get(chunks.getChunks().size() - 1).getWater());
+							//return;
 						}
 					}
 				}

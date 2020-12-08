@@ -12,15 +12,21 @@ import noise.Noise;
 public class Chunk {
 	
 	private Entity entity;
-	private Geometry mesh;
 	private Shader shader = new MeshShader("block.glsl");
-	
 	private Entity water;
 	
 	private byte[][][] cells;
 	private int column;
 	private int row;
 	
+	private byte[][][] frontCells;
+	private byte[][][] backCells;
+	private byte[][][] leftCells;
+	private byte[][][] rightCells;
+	
+	
+	
+	//how many blocks one chunk containes.
 	private int width;
 	private int height;
 	
@@ -34,7 +40,6 @@ public class Chunk {
 		this.width = width;
 		this.height = height;
 		
-		mesh = new Geometry(80);
 		entity = new Entity(0, shader);
 		
 		water = new Entity(0, shader);
@@ -116,22 +121,31 @@ public class Chunk {
 							continue;
 						}
 						
-						if(z == 0 || cells[x][y][z - 1] == Block.Air || cells[x][y][z - 1] == Block.WATER) {
-							entity.getGeometry().createFaceBack(newX, newY, newZ, texture, sprite[0],  sprite[1]);
+						if(z != 0) {
+							if(z == 0 || cells[x][y][z - 1] == Block.Air || cells[x][y][z - 1] == Block.WATER) {
+								entity.getGeometry().createFaceBack(newX, newY, newZ, texture, sprite[0],  sprite[1]);
+							}
 						}
-						if(z == width - 1 || cells[x][y][z + 1] == Block.Air || cells[x][y][z + 1] == Block.WATER) {
-							entity.getGeometry().createFaceFront(newX, newY, newZ, texture,  sprite[2],  sprite[3]);
+						if(z != width - 1)  {
+							if(z == width - 1 || cells[x][y][z + 1] == Block.Air || cells[x][y][z + 1] == Block.WATER) {
+								entity.getGeometry().createFaceFront(newX, newY, newZ, texture,  sprite[2],  sprite[3]);
+							}
 						}
-						if(x == 0 || cells[x - 1][y][z] == Block.Air || cells[x - 1][y][z] == Block.WATER) {
-							entity.getGeometry().createFaceLeft(newX, newY, newZ, texture,  sprite[4],  sprite[5]);
+						if(x != 0) {
+							if(x == 0 || cells[x - 1][y][z] == Block.Air || cells[x - 1][y][z] == Block.WATER) {
+								entity.getGeometry().createFaceLeft(newX, newY, newZ, texture,  sprite[4],  sprite[5]);
+							}
 						}
-						if(x == width - 1 || cells[x + 1][y][z] == Block.Air || cells[x + 1][y][z] == Block.WATER) {
-							entity.getGeometry().createFaceRight(newX, newY, newZ, texture,  sprite[6],  sprite[7]);
+						if(x != width - 1) {
+							if(x == width - 1 || cells[x + 1][y][z] == Block.Air || cells[x + 1][y][z] == Block.WATER) {
+								entity.getGeometry().createFaceRight(newX, newY, newZ, texture,  sprite[6],  sprite[7]);
+							}
 						}
+						
 						if(y == height - 1 || cells[x][y + 1][z] == Block.Air || cells[x][y + 1][z] == Block.WATER) {
 							entity.getGeometry().createFaceUp(newX, newY, newZ, texture,  sprite[8],  sprite[9]);
 						}
-						if(y == 0 || cells[x][y - 1][z] == Block.Air || cells[x][y - 1][z] == Block.WATER) {
+						if(y > 0 && (cells[x][y - 1][z] == Block.Air || cells[x][y - 1][z] == Block.WATER)) {
 							entity.getGeometry().createFaceDown(newX, newY, newZ, texture,  sprite[10],  sprite[11]);
 						}
 						
@@ -150,13 +164,6 @@ public class Chunk {
 	
 	
 
-	public Geometry getMesh() {
-		return mesh;
-	}
-
-	public void setMesh(Geometry mesh) {
-		this.mesh = mesh;
-	}
 
 	public byte[][][] getCells() {
 		return cells;
