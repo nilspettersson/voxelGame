@@ -46,8 +46,14 @@ public class NoiseTesting extends Game {
 						
 						e.getMaterial().setProperty("value", new Vector3f(color));*/
 						
-						float value = noise.getHeightAt(x, y, 2f);
-						value = noise.getHeightAt(x, y, value);
+						float value = noise.treeNoise(x, y, 0.01f);
+						/*if(value > 0.95) {
+							value = 1;
+						}
+						else {
+							value = 0;
+						}*/
+						//value = noise.getHeightAt(x, y, value);
 						
 						e.getMaterial().setProperty("value", new Vector3f(value));
 						

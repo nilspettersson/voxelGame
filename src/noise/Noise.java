@@ -50,5 +50,23 @@ public class Noise {
 		value = (float) Math.pow(value, 3);
 		return Math.max(value, 0);
 	}
+	
+	public float treeNoise(float x, float y, float treeAmount) {
+		float value = (float) noise.eval(x / 0.1, y / 0.1);
+		
+		value *= 0.5;
+		value += 0.5;
+		value = (float) Math.pow(value, 1);
+		
+		if(value > 1 - treeAmount) {
+			value = 1;
+		}
+		else {
+			value = 0;
+		}
+		
+		return Math.max(value, 0);
+	}
+	
 
 }
