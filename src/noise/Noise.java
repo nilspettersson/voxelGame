@@ -29,14 +29,14 @@ public class Noise {
 	public float getCaveAt(float x, float y, float z, float size) {
 		x *= size;
 		y *= size;
-		float value = (float) noise.eval(x / 30, y / 30, z / 30);
-		value += (float) noise.eval(x / 10, y / 10, z / 10) * 0.16;
+		float value = (float) noise.eval(x / 20, y / 20, z / 20);
+		//value += (float) noise.eval(x / 10, y / 10, z / 10) * 0.16;
 		
 		
 		value = Math.abs(value);
-		value *= 0.5;
-		value += 1;
-		value = (float) Math.pow(value, 6);
+		/*value *= 0.5;
+		value += 1;*/
+		value = (float) Math.pow(value, 3);
 		return Math.max(value, 0);
 	}
 	

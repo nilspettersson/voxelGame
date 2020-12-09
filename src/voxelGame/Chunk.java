@@ -165,10 +165,6 @@ public class Chunk {
 						}
 
 					}
-					/*else if(y <= Biome.WATERLEVEL && cells[x][y][z] == Block.Air) {
-						cells[x][y][z] = Block.WATER;
-					}*/
-					
 					
 				}
 			}
@@ -188,21 +184,23 @@ public class Chunk {
 					float myX = x + column * width;
 					float myZ = z + row * width;
 					
+					float caveMax = 0.3f;
+					
 					float cave = noise.getCaveAt(myX, myZ, y, 1f) * 1f + 0;
-					if(cave > 4) {
+					if(cave > caveMax) {
 						cells[x][y][z] = Block.Air;
 					}
 					
 					//adding neighboring cells
 					if(x == 0) {
 						cave = noise.getCaveAt(myX - 1, myZ, y, 1f) * 1f + 0;
-						if(cave > 4) {
+						if(cave > caveMax) {
 							leftCells[0][y][z] = Block.Air;
 						}
 					}
 					if(x == width - 1) {
 						cave = noise.getCaveAt(myX + 1, myZ, y, 1f) * 1f + 0;
-						if(cave > 4) {
+						if(cave > caveMax) {
 							rightCells[0][y][z] = Block.Air;
 						}
 					}
@@ -210,14 +208,14 @@ public class Chunk {
 					
 					if(z == 0) {
 						cave = noise.getCaveAt(myX, myZ - 1, y, 1f) * 1f + 0;
-						if(cave > 4) {
+						if(cave > caveMax) {
 							backCells[x][y][0] = Block.Air;
 						}
 					}
 					
 					if(z == width - 1) {
 						cave = noise.getCaveAt(myX, myZ + 1, y, 1f) * 1f + 0;
-						if(cave > 4) {
+						if(cave > caveMax) {
 							frontCells[x][y][0] = Block.Air;
 						}
 					}
