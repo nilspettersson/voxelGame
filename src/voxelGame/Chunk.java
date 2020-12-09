@@ -53,8 +53,8 @@ public class Chunk {
 		rightCells = new byte[1][height][width];
 		
 		generateTerain();
-		generateCaves();
 		addBlockTypes();
+		generateCaves();
 		
 	}
 	
@@ -73,6 +73,9 @@ public class Chunk {
 					if(y <= height) {
 						blockId = Block.ROCK;
 					}
+					else if(y <= Biome.WATERLEVEL) {
+						blockId = Block.WATER;
+					}
 					
 					cells[x][y][z] = blockId;
 					
@@ -87,6 +90,9 @@ public class Chunk {
 						if(y <= height) {
 							blockId = Block.ROCK;
 						}
+						else if(y <= Biome.WATERLEVEL) {
+							blockId = Block.WATER;
+						}
 						leftCells[0][y][z] = blockId;
 					}
 					if(x == width - 1) {
@@ -99,6 +105,9 @@ public class Chunk {
 						
 						if(y <= height) {
 							blockId = Block.ROCK;
+						}
+						else if(y <= Biome.WATERLEVEL) {
+							blockId = Block.WATER;
 						}
 						rightCells[0][y][z] = blockId;
 					}
@@ -113,6 +122,9 @@ public class Chunk {
 						if(y <= height) {
 							blockId = Block.ROCK;
 						}
+						else if(y <= Biome.WATERLEVEL) {
+							blockId = Block.WATER;
+						}
 						backCells[x][y][0] = blockId;
 					}
 					
@@ -124,6 +136,9 @@ public class Chunk {
 						}
 						if(y <= height) {
 							blockId = Block.ROCK;
+						}
+						else if(y <= Biome.WATERLEVEL) {
+							blockId = Block.WATER;
 						}
 						frontCells[x][y][0] = blockId;
 					}
@@ -139,7 +154,7 @@ public class Chunk {
 			for(int y = 0; y < cells[0].length; y++) {
 				for(int z = 0; z < cells[0][0].length; z++) {
 					byte blockId = 0;
-					if(cells[x][y][z] == Block.ROCK && (cells[x][y + 1][z] == Block.Air || cells[x][y + 1][z] == Block.WATER)) {
+					if(cells[x][y][z] == Block.ROCK && (cells[x][y + 1][z] == Block.Air)) {
 						
 						float myX = x + column * width;
 						float myZ = z + row * width;
@@ -150,9 +165,9 @@ public class Chunk {
 						}
 
 					}
-					else if(y <= Biome.WATERLEVEL && cells[x][y][z] == Block.Air) {
+					/*else if(y <= Biome.WATERLEVEL && cells[x][y][z] == Block.Air) {
 						cells[x][y][z] = Block.WATER;
-					}
+					}*/
 					
 					
 				}
@@ -164,6 +179,12 @@ public class Chunk {
 		for(int x = 0; x < cells.length; x++) {
 			for(int y = 0; y < cells[0].length; y++) {
 				for(int z = 0; z < cells[0][0].length; z++) {
+					
+					if(!shouldGenerateCave(x, y, z)) {
+						continue;
+					}
+					
+					
 					float myX = x + column * width;
 					float myZ = z + row * width;
 					
@@ -174,8 +195,8 @@ public class Chunk {
 					
 					//adding neighboring cells
 					if(x == 0) {
+						cave = noise.getCaveAt(myX - 1, myZ, y, 1f) * 1f + 0;
 						if(cave > 4) {
-							cave = noise.getCaveAt(myX - 1, myZ, y, 1f) * 1f + 0;
 							leftCells[0][y][z] = Block.Air;
 						}
 					}
@@ -205,6 +226,64 @@ public class Chunk {
 				}
 			}
 		}
+	}
+	
+	public boolean shouldGenerateCave(int x, int y, int z) {
+		//if cell is air, water or cell is at the bottom of the world
+		if(cells[x][y][z] == Block.WATER || cells[x][y][z] == Block.Air || y == 0) {
+			return false;
+		}
+		else if(cells[x][y + 1][z] == Block.WATER) {
+			return false;
+		}
+		
+		if(x > 0) {
+			if(cells[x - 1][y][z] == Block.WATER) {
+				return false;
+			}
+		}
+		else {
+			if(leftCells[0][y][z] == Block.WATER) {
+				return false;
+			}
+		}
+		
+		if(x < width - 1) {
+			if(cells[x + 1][y][z] == Block.WATER) {
+				return false;
+			}
+		}
+		else {
+			System.out.println(rightCells[0][y][z]);
+			if(rightCells[0][y][z] == Block.WATER) {
+				return false;
+			}
+		}
+		
+		if(z > 0) {
+			if(cells[x][y][z - 1] == Block.WATER) {
+				return false;
+			}
+		}
+		else {
+			if(backCells[x][y][0] == Block.WATER) {
+				return false;
+			}
+		}
+		
+		if(z < width - 1) {
+			if(cells[x][y][z + 1] == Block.WATER) {
+				return false;
+			}
+		}
+		else {
+			if(frontCells[x][y][0] == Block.WATER) {
+				return false;
+			}
+		}
+		
+		return true;
+			
 	}
 	
 	
