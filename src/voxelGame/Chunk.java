@@ -293,35 +293,34 @@ public class Chunk {
 						float myX = x + column * width;
 						float myZ = z + row * width;
 						
-						float value = noise.treeNoise(myX, myZ, 0.05f);
+						float value = noise.treeNoise(myX, myZ, 0.2f);
 						if(value == 1) {
-							cells[x][y + 1][z] = Block.ROCK;
-							cells[x][y + 2][z] = Block.ROCK;
-							cells[x][y + 3][z] = Block.ROCK;
-							cells[x][y + 4][z] = Block.ROCK;
-							cells[x][y + 5][z] = Block.ROCK;
+							cells[x][y + 1][z] = Block.WOOD;
+							cells[x][y + 2][z] = Block.WOOD;
+							cells[x][y + 3][z] = Block.WOOD;
+							cells[x][y + 4][z] = Block.WOOD;
 							
-							cells[x][y + 6][z] = Block.DIRT;
-							cells[x][y + 7][z] = Block.DIRT;
-							cells[x][y + 8][z] = Block.DIRT;
-							
-							for(int i = -3; i <= 3; i++) {
-								for(int ii = -3; ii <= 3; ii++) {
-									if(i == 0 && ii == 0) {
-										continue;
-									}
-									cells[x + i][y + 5][z + ii] = Block.DIRT;
-									cells[x + i][y + 6][z + ii] = Block.DIRT;
-									cells[x + i][y + 7][z + ii] = Block.DIRT;
-									cells[x + i][y + 8][z + ii] = Block.DIRT;
-								}
-							}
+							cells[x][y + 5][z] = Block.LEAF;
 							
 							for(int i = -2; i <= 2; i++) {
 								for(int ii = -2; ii <= 2; ii++) {
-									cells[x + i][y + 9][z + ii] = Block.DIRT;
+									if(i == 0 && ii == 0) {
+										continue;
+									}
+									cells[x + i][y + 4][z + ii] = Block.LEAF;
+									cells[x + i][y + 5][z + ii] = Block.LEAF;
 								}
 							}
+							for(int i = -1; i <= 1; i++) {
+								for(int ii = -1; ii <= 1; ii++) {
+									cells[x + i][y + 6][z + ii] = Block.LEAF;
+								}
+							}
+							cells[x][y + 7][z] = Block.LEAF;
+							cells[x + 1][y + 7][z] = Block.LEAF;
+							cells[x - 1][y + 7][z] = Block.LEAF;
+							cells[x][y + 7][z - 1] = Block.LEAF;
+							cells[x][y + 7][z + 1] = Block.LEAF;
 							
 							
 						}

@@ -9,6 +9,8 @@ public class Block {
 	public static final int WATER = 4;
 	public static final int SAND = 5;
 	public static final int SNOW = 6;
+	public static final int WOOD = 7;
+	public static final int LEAF = 8;
 	
 	public static int[] getBlockSprite(int blockId) {
 		if(blockId == GRASS) {
@@ -69,6 +71,26 @@ public class Block {
 					3, 1,
 					3, 1,
 					3, 1,
+					};
+		}
+		else if(blockId == WOOD) {
+			return new int[] {
+					1, 1,
+					1, 1,
+					1, 1,
+					1, 1,
+					1, 1,
+					1, 1,
+					};
+		}
+		else if(blockId == LEAF) {
+			return new int[] {
+					2, 1,
+					2, 1,
+					2, 1,
+					2, 1,
+					2, 1,
+					2, 1,
 					};
 		}
 		
