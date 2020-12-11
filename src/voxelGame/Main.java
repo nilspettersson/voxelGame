@@ -2,6 +2,8 @@ package voxelGame;
 
 import org.joml.Vector3f;
 import org.joml.Vector4f;
+
+import niles.lwjgl.entity.Geometry;
 import niles.lwjgl.loop.Game;
 import niles.lwjgl.loop.Scene;
 import niles.lwjgl.npsl.MeshShader;
@@ -36,6 +38,8 @@ public class Main extends Game{
 				addLight(new Vector3f(40, 19000, 800), new Vector3f(1, 1, 0.9f), 10000000);
 				getCamera().getPosition().add(new Vector3f(0, 40, 0));
 				
+				
+				
 			}
 			
 			@Override
@@ -44,8 +48,8 @@ public class Main extends Game{
 				int playerX = (int) Math.floor(getCamera().getPosition().x / (2 * 16));
 				int playerZ = (int) Math.floor(getCamera().getPosition().z / (2 * 16));
 				
-				GenerateChuncks(playerX, playerZ, 14);
-				removeChuncks(playerX, playerZ, 18);
+				GenerateChuncks(playerX, playerZ, 16);
+				removeChuncks(playerX, playerZ, 40);
 				
 				
 				

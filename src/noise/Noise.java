@@ -13,10 +13,17 @@ public class Noise {
 	public float getHeightAt(float x, float y, float size) {
 		x *= size;
 		y *= size;
-		float value = (float) noise.eval(x / 300, y / 300);
-		value += (float) noise.eval(x / 100, y / 100) * 0.5;
-		value += (float) noise.eval((x + 10000) / 20, (y + 10000) / 20) * 0.3;
-		value += (float) noise.eval((x + 30000) / 4, (y + 30000) / 4) * 0.02;
+		float value = (float) noise.eval(x / 300, y / 300) * 1.2f;
+		value += (float) noise.eval((x + 200) / 50, (y + 200) / 50) * 0.4f;
+		value += (float) noise.eval((x + 10000) / 20, (y + 10000) / 20) * 0.1;
+		value += (float) noise.eval((x + 30000) / 4, (y + 30000) / 4) * 0.03;
+		
+		float rivers = ((float) noise.eval(x / 20, y / 20) * 0.2f);
+		rivers = (float) Math.pow(rivers, 1);
+		rivers = Math.abs(rivers);
+		rivers = Math.min(rivers, 0.3f);
+		
+		value += rivers;
 		
 		
 		value = Math.abs(value);

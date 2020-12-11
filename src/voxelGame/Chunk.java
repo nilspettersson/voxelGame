@@ -4,6 +4,7 @@ import org.joml.Vector3f;
 
 import niles.lwjgl.entity.Entity;
 import niles.lwjgl.entity.Geometry;
+import niles.lwjgl.entity.Vertex;
 import niles.lwjgl.npsl.MeshShader;
 import niles.lwjgl.npsl.Shader;
 import niles.lwjgl.util.Texture;
@@ -24,6 +25,8 @@ public class Chunk {
 	private byte[][][] leftCells;
 	private byte[][][] rightCells;
 	
+	
+	private int maxBlock = 0;
 	
 	
 	//how many blocks one chunk contains.
@@ -76,6 +79,12 @@ public class Chunk {
 					}
 					else if(y <= Biome.WATERLEVEL) {
 						blockId = Block.WATER;
+					}
+					
+					if(blockId != Block.Air) {
+						if(y > maxBlock) {
+							maxBlock = y;
+						}
 					}
 					
 					cells[x][y][z] = blockId;
@@ -174,7 +183,7 @@ public class Chunk {
 	
 	public void generateCaves() {
 		for(int x = 0; x < cells.length; x++) {
-			for(int y = 0; y < cells[0].length; y++) {
+			for(int y = 0; y < maxBlock + 1; y++) {
 				for(int z = 0; z < cells[0][0].length; z++) {
 					
 					if(!shouldGenerateCave(x, y, z)) {
@@ -287,13 +296,13 @@ public class Chunk {
 	
 	public void generateTrees(){
 		for(int x = 3; x < cells.length -3; x++) {
-			for(int y = 0; y < cells[0].length; y++) {
+			for(int y = 0; y < maxBlock + 1; y++) {
 				for(int z = 3; z < cells[0][0].length - 3; z++) {
 					if(cells[x][y][z] == Block.GRASS) {
 						float myX = x + column * width;
 						float myZ = z + row * width;
 						
-						float value = noise.treeNoise(myX, myZ, 0.2f);
+						float value = noise.treeNoise(myX, myZ, 0.12f);
 						if(value == 1) {
 							cells[x][y + 1][z] = Block.WOOD;
 							cells[x][y + 2][z] = Block.WOOD;
@@ -335,7 +344,7 @@ public class Chunk {
 	
 	public void generateMesh(Texture texture){
 		for(int x = 0; x < cells.length; x++) {
-			for(int y = 0; y < cells[0].length; y++) {
+			for(int y = 0; y < maxBlock + 8; y++) {
 				for(int z = 0; z < cells[0][0].length; z++) {
 					
 					
@@ -402,6 +411,18 @@ public class Chunk {
 						
 						if(y == height - 1 || cells[x][y + 1][z] == Block.Air || cells[x][y + 1][z] == Block.WATER) {
 							entity.getGeometry().createFaceUp(newX, newY, newZ, texture,  sprite[8],  sprite[9]);
+							/*if(x > 0 && cells[x - 1][y + 1][z] != Block.Air) {
+								if(z < width - 1 && cells[x][y + 1][z + 1] != Block.Air) {
+									entity.getGeometry().getVertices().put(entity.getGeometry().getCurrentVertexIndex() + 3, 0.2f);
+								}
+								else if(z > 0 && cells[x][y + 1][z - 1] != Block.Air) {
+									entity.getGeometry().getVertices().put(entity.getGeometry().getCurrentVertexIndex() - Vertex.size * 3 + 3, 0.2f);
+								}
+							}*/
+							
+							/*entity.getGeometry().getVertices().put(entity.getGeometry().getCurrentVertexIndex() - Vertex.size * 1 + 3, 0);
+							entity.getGeometry().getVertices().put(entity.getGeometry().getCurrentVertexIndex() - Vertex.size * 2 + 3, 0);
+							entity.getGeometry().getVertices().put(entity.getGeometry().getCurrentVertexIndex() - Vertex.size * 3 + 3, 0);*/
 						}
 						
 						if(y > 0 && (cells[x][y - 1][z] == Block.Air || cells[x][y - 1][z] == Block.WATER)) {
